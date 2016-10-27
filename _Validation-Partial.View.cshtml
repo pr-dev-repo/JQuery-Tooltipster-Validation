@@ -1,0 +1,177 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+<!DOCTYPE html>
+<html>
+<body>
+
+<script>
+    /*********************************************** Validation ************************************************************* */
+
+    $('input[type="text"]').tooltipster({
+        theme: 'tooltipster-light',
+        trigger: 'manual', 
+        position: 'right',
+        animation: 'grow'
+    });
+    // initialize password
+    $('input[type="password"]').tooltipster({
+        theme: 'tooltipster-light',
+        trigger: 'focus', 
+        position: 'right',
+        animation: 'grow'
+    });
+
+    // initialize validate plugin on the form
+    $("#mainl").validate({
+        errorPlacement: function (error, element) {
+            var ele = $(element),
+                err = $(error),
+                msg = err.text();
+            if (msg != null && msg !== "") {
+                ele.tooltipster('content', msg);
+                ele.tooltipster('open'); //open only if the error message is not blank. By default jquery-validate will return a label with no actual text in it so we have to check the innerHTML.
+            }
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass(errorClass).addClass(validClass).tooltipster('close');
+        },
+        rules: {
+            username: {
+                required: true,
+                maxlength: 20
+                      
+            },
+            password: {
+                required: true,
+                       
+            }
+        },
+        messages: {
+            username: {
+                required: "@Localizer["Please enter your Username."]",
+            maxlength:"@Localizer["The Username field cannot exceed 20 characters."]"
+    },
+
+        password:{
+        required: "@Localizer["Please enter your Password."]",
+        maxlength:"@Localizer["The Password field cannot exceed 20 characters."]"
+                        
+        }
+
+    }
+            
+    });
+
+    /*********************************************** Recover PWD ************************************************************* */
+
+    $('input[type="email"]').tooltipster({
+        theme: 'tooltipster-light',
+        trigger: 'manual',
+        position: 'right',
+        animation: 'grow'
+    });
+
+    // initialize validate plugin on the form
+    $("#recover-pass").validate({
+        errorPlacement: function (error, element) {
+            var ele = $(element),
+                err = $(error),
+                msg = err.text();
+            if (msg != null && msg !== "") {
+                ele.tooltipster('content', msg);
+                ele.tooltipster('open'); //open only if the error message is not blank. By default jquery-validate will return a label with no actual text in it so we have to check the innerHTML.
+            }
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass(errorClass).addClass(validClass).tooltipster('close');
+        },
+        rules: {
+            email: {
+                required: true,
+                maxlength: 50,
+                email: true
+                
+
+            }
+
+        },
+        messages: {
+            email: {
+                required: "@Localizer["Please enter an e-mail address."]",
+        maxlength:"@Localizer["Please check your email address. It exceeds the maximum allowed characters."]",
+        email: "@Localizer["The Email field is not a valid e-mail address."]"
+    }
+
+    }
+
+    });
+
+    /*********************************************** New password ************************************************************* */
+
+    /*start regex method*/
+    $.validator.addMethod(
+    "regx",
+    function(value, element, regexp) {
+        var re = new RegExp(regexp);
+        return this.optional(element) || re.test(value);
+    });
+
+    /*Validation*/
+    $('input[type="password"]').tooltipster({
+        theme: 'tooltipster-light',
+        trigger: 'manual',
+        position: 'right',
+        animation: 'grow'
+    });
+
+    // initialize validate plugin on the form
+    $("#main-login").validate({
+        errorPlacement: function (error, element) {
+            var ele = $(element),
+                err = $(error),
+                msg = err.text();
+            if (msg != null && msg !== "") {
+                ele.tooltipster('content', msg);
+                ele.tooltipster('open'); //open only if the error message is not blank. By default jquery-validate will return a label with no actual text in it so we have to check the innerHTML.
+            }
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass(errorClass).addClass(validClass).tooltipster('close');
+        },
+        rules: {
+            newpassword: {
+                required: true,
+                maxlength: 20,
+                minlength: 8,
+                regx: '^(?=.*\\d{4,})(?=.*[a-z])(?=.*[A-Z]).{8,20}$'
+
+            },
+            newpasswordconfirm: {
+                required: true,
+                equalTo: '#newpass'
+            }
+        },
+        messages: {
+            newpassword: {
+                required: "@Localizer["Please enter a new password."]",
+            maxlength: "@Localizer["The new password must provide a minimum of 8 characters and no more than 20 characters."]",
+        minlength: "@Localizer["The new password must provide a minimum of 8 characters and no more than 20 characters."]",
+        regx: "@Localizer["The value provided for the new password field does not meet our policy complexity, please try again."]"
+
+        },
+
+            newpasswordconfirm: {
+            required: "@Localizer["Please confirm your password."]",
+            maxlength:"@Localizer["The new password must provide a minimum of 8 characters and no more than 20 characters."]",
+            equalTo: "@Localizer["Password fields do not match, please try again."]"
+        }
+
+        }
+
+        });
+
+</script>
+
+   
+</body>
+</html>
